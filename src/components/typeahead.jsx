@@ -1,3 +1,4 @@
+/* vim: set softtabstop=4:shiftwidth=4:tabstop=4 */
 'use strict';
 
 var React = require('react'),
@@ -22,7 +23,7 @@ module.exports = React.createClass({
     propTypes: process.env.NODE_ENV === 'production' ? {} : {
         inputId: React.PropTypes.string,
         inputName: React.PropTypes.string,
-        className: React.PropTypes.string,
+        classNames: React.PropTypes.object,
         autoFocus: React.PropTypes.bool,
         hoverSelect: React.PropTypes.bool,
         inputValue: React.PropTypes.string,
@@ -49,7 +50,13 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            className: '',
+            classNames: {
+                container: 'react-typeahead-container',
+                inputContainer: 'react-typeahead-input-container',
+                userText: 'react-typeahead-input react-typeahead-usertext',
+                hint: 'react-typeahead-input react-typeahead-hint',
+                options: 'react-typeahead-options'
+            },
             inputValue: '',
             options: [],
             hoverSelect: true,
@@ -136,7 +143,7 @@ module.exports = React.createClass({
                 style={{
                     position: 'relative'
                 }}
-                className={'react-typeahead-container ' + _this.props.className}>
+                className={_this.props.classNames.container}>
                 {_this.renderInput()}
                 {_this.renderDropdown()}
                 {_this.renderAriaMessageForOptions()}
@@ -150,7 +157,6 @@ module.exports = React.createClass({
             state = _this.state,
             props = _this.props,
             inputValue = props.inputValue,
-            className = 'react-typeahead-input',
             inputDirection = getTextDirection(inputValue);
 
         return (
@@ -158,13 +164,13 @@ module.exports = React.createClass({
                 style={{
                     position: 'relative'
                 }}
-                className='react-typeahead-input-container'>
+                className={props.classNames.inputContainer}>
                 <Input
                     disabled={true}
                     role='presentation'
                     aria-hidden={true}
                     dir={inputDirection}
-                    className={className + ' react-typeahead-hint'}
+                    className={props.classNames.hint}
                     style={{
                         color: 'silver',
                         WebkitTextFillColor: 'silver',
@@ -196,7 +202,7 @@ module.exports = React.createClass({
                     onSelect={props.onSelect}
                     onKeyUp={props.onKeyUp}
                     onKeyPress={props.onKeyPress}
-                    className={className + ' react-typeahead-usertext'}
+                    className={props.classNames.userText}
                     style={{
                         position: 'relative',
                         background: 'transparent'
@@ -231,7 +237,7 @@ module.exports = React.createClass({
                     boxSizing: 'border-box',
                     display: isDropdownVisible ? 'block' : 'none'
                 }}
-                className='react-typeahead-options'
+                className={props.classNames.options}
                 onMouseOut={this.handleMouseOut}>
                 {
                     props.options.map(function(data, index) {
